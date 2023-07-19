@@ -21,4 +21,12 @@ export class UserServiceImpl implements UserService {
   async deleteUser (userId: any): Promise<void> {
     await this.repository.delete(userId)
   }
+  
+  async setUserPrivate (userId: any): Promise<void> {
+    await this.repository.setPrivate(userId)
+  }
+
+  async setUserPublic (userId: any): Promise<void> {
+    await this.repository.setPublic(userId)
+  }
 }

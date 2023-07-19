@@ -44,3 +44,19 @@ userRouter.delete('/', async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.OK)
 })
+
+userRouter.put('/profile/private', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+
+  await service.setUserPrivate(userId)
+
+  return res.status(HttpStatus.OK)
+})
+
+userRouter.put('/profile/public', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+
+  await service.setUserPublic(userId)
+
+  return res.status(HttpStatus.OK)
+})
