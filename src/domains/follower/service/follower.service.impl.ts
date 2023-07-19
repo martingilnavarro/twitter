@@ -10,4 +10,8 @@ export class FollowerServiceImpl implements FollowerService {
     return await this.repository.follow(userId, followedId)
   }
 
+  async deleteFollow (userId: string, followedId: string): Promise<void> {
+    await this.repository.unfollow(userId, followedId)
+  }
+
 }

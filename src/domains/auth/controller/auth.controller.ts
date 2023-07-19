@@ -13,7 +13,7 @@ export const authRouter = Router()
 // Use dependency injection
 const service: AuthService = new AuthServiceImpl(new UserRepositoryImpl(db))
 
-authRouter.post('/follow/:user_id', BodyValidation(SignupInputDTO), async (req: Request, res: Response) => {
+authRouter.post('/signup', BodyValidation(SignupInputDTO), async (req: Request, res: Response) => {
   const data = req.body
 
   const token = await service.signup(data)
@@ -21,7 +21,7 @@ authRouter.post('/follow/:user_id', BodyValidation(SignupInputDTO), async (req: 
   return res.status(HttpStatus.CREATED).json(token)
 })
 
-authRouter.post('/unfollow/:user_id', BodyValidation(LoginInputDTO), async (req: Request, res: Response) => {
+authRouter.post('/login', BodyValidation(LoginInputDTO), async (req: Request, res: Response) => {
   const data = req.body
 
   const token = await service.login(data)

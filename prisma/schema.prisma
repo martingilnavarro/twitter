@@ -13,7 +13,7 @@ generator client {
 // You can find more about datasources here: https://www.prisma.io/docs/concepts/components/prisma-schema/data-sources
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:password@localhost:5432/app"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -45,6 +45,8 @@ model Follow {
 
   follower User @relation(name: "follows", fields: [followerId], references: [id], onDelete: Cascade) // One to many
   followed User @relation(name: "followers", fields: [followedId], references: [id], onDelete: Cascade) // One to many
+
+  @@unique([followerId, followedId])
 }
 
 model Post {

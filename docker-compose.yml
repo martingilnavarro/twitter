@@ -4,9 +4,9 @@ services:
     container_name: db
     restart: always
     environment:
-      - POSTGRES_DB=app
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - '5432:5432'
     volumes:
@@ -25,7 +25,7 @@ services:
     restart: always
     tty: true
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db/app?connect_timeout=600
+      - DATABASE_URL=${DOCKER_DATABASE_URL}
       - PORT=8080
     env_file:
       - .envrc
@@ -41,3 +41,4 @@ services:
       - db
 volumes:
   db-data:
+
