@@ -50,7 +50,7 @@ userRouter.put('/profile/private', async (req: Request, res: Response) => {
 
   await service.setUserPrivate(userId)
 
-  return res.status(HttpStatus.OK)
+  return res.status(HttpStatus.OK).send(`Profile: private`)
 })
 
 userRouter.put('/profile/public', async (req: Request, res: Response) => {
@@ -58,5 +58,5 @@ userRouter.put('/profile/public', async (req: Request, res: Response) => {
 
   await service.setUserPublic(userId)
 
-  return res.status(HttpStatus.OK)
+  return res.status(HttpStatus.OK).send(`Profile: public`)
 })
