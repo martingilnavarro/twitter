@@ -84,4 +84,23 @@ export class PostRepositoryImpl implements PostRepository {
     })
     return followers.map(follower => new FollowerDTO(follower))
   }
+
+  async followsByUser (userId: string): Promise<FollowerDTO[]> {
+    const followers = await this.db.follow.findMany({
+      where: {
+        followerId: userId
+      }
+    })
+    return followers.map(follower => new FollowerDTO(follower))
+  }
+
+  async publicAuthors (): Promise<UserDTO[]> {
+    const publicAuthors = await this.db.user.findMany({
+      where: {
+        private: false,
+        
+      }
+    })
+    return publicAuthors.map(author => new UserDTO(author))
+  }
 }

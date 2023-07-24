@@ -12,4 +12,6 @@ export interface PostRepository {
   getByAuthorId: (authorId: string) => Promise<PostDTO[]>
   getAuthor: (postId:string) => Promise<UserDTO | null>
   isFollowing: (authorId: string, userId: string) => Promise<FollowerDTO[]>
+  followsByUser: (userId: string) => Promise<FollowerDTO[]>
+  publicAuthors: () => Promise<UserDTO[]>
 }

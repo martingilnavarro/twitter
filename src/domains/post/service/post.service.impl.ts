@@ -40,10 +40,14 @@ export class PostServiceImpl implements PostService {
     // TODO: filter post search to return posts from authors that the user follows
     const allPosts = await this.repository.getAllByDatePaginated(options)
     
+    const publicAuthors = await this.repository.publicAuthors()
+    const publicAuthorsId = publicAuthors.map(author => author.id)
+    const follows = await this.repository.followsByUser(userId)
+    const idFollowed = follows.map(follow => follow.followedId)
+
     const allowedPosts = allPosts.filter(postAllowed)
     function postAllowed(post:PostDTO) {
-      
-      return true;
+      return post.authorId === userId || publicAuthorsId.includes(post.authorId) || idFollowed.includes(post.authorId);
     }
     
     return allowedPosts
