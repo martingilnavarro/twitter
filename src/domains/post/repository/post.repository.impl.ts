@@ -4,6 +4,8 @@ import { CursorPagination } from '@types'
 
 import { PostRepository } from '.'
 import { CreatePostInputDTO, PostDTO } from '../dto'
+import { UserDTO } from '../../user/dto'
+import { FollowerDTO } from '@domains/follower/dto'
 
 export class PostRepositoryImpl implements PostRepository {
   constructor (private readonly db: PrismaClient) {}
@@ -31,7 +33,10 @@ export class PostRepositoryImpl implements PostRepository {
           id: 'asc'
         }
       ]
+      
+      
     })
+    
     return posts.map(post => new PostDTO(post))
   }
 
@@ -59,5 +64,24 @@ export class PostRepositoryImpl implements PostRepository {
       }
     })
     return posts.map(post => new PostDTO(post))
+  }
+
+  async getAuthor (authorId: string): Promise<UserDTO | null> {
+    const author = await this.db.user.findUnique({
+      where: {
+        id: authorId
+      }
+    })
+    return (author != null) ? new UserDTO(author) : null
+  }
+
+  async isFollowing (authorId: string, userId: string): Promise<FollowerDTO[]> {
+    const followers = await this.db.follow.findMany({
+      where: {
+        followedId: authorId,
+        followerId: userId
+      }
+    })
+    return followers.map(follower => new FollowerDTO(follower))
   }
 }

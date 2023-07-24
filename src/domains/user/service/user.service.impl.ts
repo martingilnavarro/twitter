@@ -12,6 +12,7 @@ export class UserServiceImpl implements UserService {
     if (!user) throw new NotFoundException('user')
     return user
   }
+  
 
   async getUserRecommendations (userId: any, options: OffsetPagination): Promise<UserDTO[]> {
     // TODO: make this return only users followed by users the original user follows
@@ -30,3 +31,4 @@ export class UserServiceImpl implements UserService {
     await this.repository.setPublic(userId)
   }
 }
+
