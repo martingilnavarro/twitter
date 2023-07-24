@@ -52,7 +52,8 @@ export class PostServiceImpl implements PostService {
   async getPostsByAuthor (userId: any, authorId: string): Promise<PostDTO[]> {
     // TODO: throw exception when the author has a private profile and the user doesn't follow them
     const author = await this.repository.getAuthor(authorId)
-    if (author?.private && authorId !== userId ) throw new ForbiddenException()
+    const isFollowed = await this.repository.isFollowing(authorId, userId)
+    if (author?.private && !isFollowed[0] && authorId !== userId ) throw new ForbiddenException()
     return await this.repository.getByAuthorId(authorId)
   }
 }
