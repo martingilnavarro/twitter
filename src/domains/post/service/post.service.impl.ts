@@ -2,7 +2,7 @@ import { CreatePostInputDTO, PostDTO } from '../dto'
 import { PostRepository } from '../repository'
 import { PostService } from '.'
 import { validate } from 'class-validator'
-import { ForbiddenException, NotFoundException } from '@utils'
+import { ForbiddenException, NotFoundException, PrivateAuthor } from '@utils'
 import { CursorPagination } from '@types'
 
 
@@ -34,7 +34,7 @@ export class PostServiceImpl implements PostService {
     
     const authorAllowed = 
     publicAuthorsId.includes(post.authorId) || idFollowed.includes(post.authorId) || post.authorId === userId
-    if (!authorAllowed ) throw new ForbiddenException()
+    if (!authorAllowed ) throw new PrivateAuthor()
     return post
   }
   
@@ -66,7 +66,7 @@ export class PostServiceImpl implements PostService {
     
     const authorAllowed = 
     publicAuthorsId.includes(authorId) || idFollowed.includes(authorId) || authorId === userId
-    if (!authorAllowed ) throw new ForbiddenException()
+    if (!authorAllowed ) throw new PrivateAuthor()
 
     return await this.repository.getByAuthorId(authorId)
   }

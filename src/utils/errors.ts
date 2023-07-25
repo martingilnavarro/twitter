@@ -36,6 +36,12 @@ export class NotFoundException extends HttpException {
   }
 }
 
+export class PrivateAuthor extends HttpException {
+  constructor (model?: string) {
+    super(HttpStatus.NOT_FOUND, `You have to follow the author to see his posts.`)
+  }
+}
+
 export class ConflictException extends HttpException {
   constructor (errorCode?: string) {
     super(HttpStatus.CONFLICT, 'Conflict', { error_code: errorCode })
