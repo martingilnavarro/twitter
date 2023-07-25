@@ -57,8 +57,11 @@ export class PostRepositoryImpl implements PostRepository {
     return (post != null) ? new PostDTO(post) : null
   }
 
-  async getByAuthorId (authorId: string): Promise<PostDTO[]> {
+  async getByAuthorId (authorId: string, options: CursorPagination): Promise<PostDTO[]> {
     const posts = await this.db.post.findMany({
+      cursor: options.after ? { id: options.after } : (options.before) ? { id: options.before } : undefined,
+      skip: options.after ?? options.before ? 1 : undefined,
+      take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,
       where: {
         authorId
       }
