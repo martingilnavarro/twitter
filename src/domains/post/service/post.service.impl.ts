@@ -27,11 +27,14 @@ export class PostServiceImpl implements PostService {
     const post = await this.repository.getById(postId)
     
     if (!post) throw new NotFoundException('post')
-    const author = await this.repository.getAuthor(post.authorId)
-    const isFollowed = await this.repository.isFollowing(post.authorId, userId)
+    const publicAuthors = await this.repository.publicAuthors()
+    const publicAuthorsId = publicAuthors.map(author => author.id)
+    const follows = await this.repository.followsByUser(userId)
+    const idFollowed = follows.map(follow => follow.followedId)
     
-    
-    if (author?.private && !isFollowed[0] && post.authorId !== userId ) throw new ForbiddenException()
+    const authorAllowed = 
+    publicAuthorsId.includes(post.authorId) || idFollowed.includes(post.authorId) || post.authorId === userId
+    if (!authorAllowed ) throw new ForbiddenException()
     return post
   }
   
@@ -55,9 +58,16 @@ export class PostServiceImpl implements PostService {
 
   async getPostsByAuthor (userId: any, authorId: string): Promise<PostDTO[]> {
     // TODO: throw exception when the author has a private profile and the user doesn't follow them
-    const author = await this.repository.getAuthor(authorId)
-    const isFollowed = await this.repository.isFollowing(authorId, userId)
-    if (author?.private && !isFollowed[0] && authorId !== userId ) throw new ForbiddenException()
+    
+    const publicAuthors = await this.repository.publicAuthors()
+    const publicAuthorsId = publicAuthors.map(author => author.id)
+    const follows = await this.repository.followsByUser(userId)
+    const idFollowed = follows.map(follow => follow.followedId)
+    
+    const authorAllowed = 
+    publicAuthorsId.includes(authorId) || idFollowed.includes(authorId) || authorId === userId
+    if (!authorAllowed ) throw new ForbiddenException()
+
     return await this.repository.getByAuthorId(authorId)
   }
 }

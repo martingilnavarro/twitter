@@ -10,8 +10,6 @@ export interface PostRepository {
   delete: (postId: string) => Promise<void>
   getById: (postId: string) => Promise<PostDTO | null>
   getByAuthorId: (authorId: string) => Promise<PostDTO[]>
-  getAuthor: (postId:string) => Promise<UserDTO | null>
-  isFollowing: (authorId: string, userId: string) => Promise<FollowerDTO[]>
   followsByUser: (userId: string) => Promise<FollowerDTO[]>
   publicAuthors: () => Promise<UserDTO[]>
 }
