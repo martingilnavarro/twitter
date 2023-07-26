@@ -32,6 +32,7 @@ model User {
   posts     Post[]
   follows   Follow[] @relation(name: "follows")
   followers Follow[] @relation(name: "followers")
+  reactions Reaction[] @relation(name: "reactionsUser")
 }
 
 model Follow {
@@ -50,6 +51,25 @@ model Follow {
   @@unique([followerId, followedId])
 }
 
+model Reaction {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // Primary Key
+
+  userId String @db.Uuid()
+  postId String @db.Uuid()
+
+  like  Boolean @default(true) 
+  retweet  Boolean @default(false) 
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime? // Optional value
+
+  user User @relation(name: "reactionsUser", fields: [userId], references: [id], onDelete: Cascade) // One to many
+  post Post @relation(name: "reactionsPost", fields: [postId], references: [id], onDelete: Cascade) // One to many
+
+  @@unique([userId, postId])
+}
+
 model Post {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // Primary Key
 
@@ -62,4 +82,7 @@ model Post {
   deletedAt DateTime? // Optional value
 
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade) // One to many
+  reactions Reaction[] @relation(name: "reactionsPost")
 }
+
+
