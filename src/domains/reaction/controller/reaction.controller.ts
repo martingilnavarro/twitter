@@ -14,7 +14,7 @@ export const reactionRouter = Router()
 const service: ReactionService = new ReactionServiceImpl(new ReactionRepositoryImpl(db))
 
 
-reactionRouter.post('/reaction/:post_id', async (req: Request, res: Response) => {
+reactionRouter.post('/:post_id', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { post_id } = req.params
   const {like} = req.body
@@ -25,7 +25,7 @@ reactionRouter.post('/reaction/:post_id', async (req: Request, res: Response) =>
   return res.status(HttpStatus.CREATED).json(reaction)
 })
 
-reactionRouter.delete('/reaction/:post_id', async (req: Request, res: Response) => {
+reactionRouter.delete('/:post_id', async (req: Request, res: Response) => {
   
   const { userId } = res.locals.context
   const { post_id } = req.params
