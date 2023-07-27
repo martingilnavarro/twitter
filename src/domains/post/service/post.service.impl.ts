@@ -14,9 +14,9 @@ export class PostServiceImpl implements PostService {
     return await this.repository.create(userId, data)
   }
 
-  async createComment (userId: string, data: CreatePostInputDTO): Promise<PostDTO> {
+  async createComment (userId: string, postId: string, data: CreatePostInputDTO): Promise<PostDTO> {
     await validate(data)
-    return await this.repository.comment(userId, data)
+    return await this.repository.comment(userId, postId, data)
   }
 
   async deletePost (userId: string, postId: string): Promise<void> {

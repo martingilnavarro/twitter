@@ -20,11 +20,12 @@ export class PostRepositoryImpl implements PostRepository {
     return new PostDTO(post)
   }
 
-  async comment (userId: string, data: CreatePostInputDTO): Promise<PostDTO> {
+  async comment (userId: string, postId: string, data: CreatePostInputDTO): Promise<PostDTO> {
     const post = await this.db.post.create({
       data: {
         authorId: userId,
         comment: true,
+        postCommentedId: postId,
         ...data
       }
     })

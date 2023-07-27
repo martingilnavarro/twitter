@@ -20,6 +20,7 @@ export class PostDTO {
     this.images = post.images
     this.createdAt = post.createdAt
     this.comment = post.comment
+    
   }
 
   id: string

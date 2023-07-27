@@ -54,9 +54,10 @@ postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, re
 postRouter.post('/:post_id', BodyValidation(CreatePostInputDTO), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const data = req.body
+  const { postId } = req.params
   
 
-  const post = await service.createComment(userId, data)
+  const post = await service.createComment(userId, postId, data)
   
 
   return res.status(HttpStatus.CREATED).json(post)
