@@ -50,6 +50,18 @@ postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, re
   return res.status(HttpStatus.CREATED).json(post)
 })
 
+//post comments
+postRouter.post('/:post_id', BodyValidation(CreatePostInputDTO), async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+  const data = req.body
+  
+
+  const post = await service.createComment(userId, data)
+  
+
+  return res.status(HttpStatus.CREATED).json(post)
+})
+
 postRouter.delete('/:postId', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const { postId } = req.params
