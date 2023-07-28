@@ -65,6 +65,12 @@ export class PostRepositoryImpl implements PostRepository {
       where: {
         postCommentedId: postId
       },
+      take: 10,
+      orderBy: {
+        reactions: {
+          _count: 'desc'
+        }
+      }
       
     })
     return comments.map(comment => new PostDTO(comment))
