@@ -42,6 +42,17 @@ export class PostServiceImpl implements PostService {
     if (!authorAllowed ) throw new PrivateAuthor()
     return post
   }
+
+  async getCommentsPost (userId: string, postId: string): Promise<PostDTO[]> {
+    // TODO: validate that the author has public profile or the user follows the author
+    
+    const comments = await this.repository.getCommentsPost(postId)
+    
+    
+    return comments
+  }
+
+  
   
 
   async getLatestPosts (userId: string, options: CursorPagination): Promise<PostDTO[]> {

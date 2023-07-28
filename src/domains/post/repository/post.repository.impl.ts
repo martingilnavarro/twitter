@@ -60,11 +60,22 @@ export class PostRepositoryImpl implements PostRepository {
     })
   }
 
+  async getCommentsPost (postId: string): Promise<PostDTO[]> {
+    const comments = await this.db.post.findMany({
+      where: {
+        postCommentedId: postId
+      },
+      
+    })
+    return comments.map(comment => new PostDTO(comment))
+  }
+
   async getById (postId: string): Promise<PostDTO | null> {
     const post = await this.db.post.findUnique({
       where: {
         id: postId
-      }
+      },
+      
     })
     return (post != null) ? new PostDTO(post) : null
   }

@@ -17,17 +17,18 @@ export class PostDTO {
     this.id = post.id
     this.authorId = post.authorId
     this.content = post.content
-    this.images = post.images
-    this.createdAt = post.createdAt
+    this.images = post.images    
     this.comment = post.comment
+    
+    
     
   }
 
   id: string
   authorId: string
   content: string
-  images: string[]
-  createdAt: Date
+  images: string[] 
   comment: boolean
+  
   
 }

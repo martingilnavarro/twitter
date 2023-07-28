@@ -27,8 +27,9 @@ postRouter.get('/:postId', async (req: Request, res: Response) => {
   const { postId } = req.params
 
   const post = await service.getPost(userId, postId)
+  const comments = await service.getCommentsPost(userId, postId)
 
-  return res.status(HttpStatus.OK).json(post)
+  return res.status(HttpStatus.OK).json({post, comments})
 })
 
 postRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
@@ -54,10 +55,10 @@ postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, re
 postRouter.post('/:post_id', BodyValidation(CreatePostInputDTO), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const data = req.body
-  const { postId } = req.params
+  const { post_id } = req.params
   
 
-  const post = await service.createComment(userId, postId, data)
+  const post = await service.createComment(userId, post_id, data)
   
 
   return res.status(HttpStatus.CREATED).json(post)
