@@ -14,4 +14,8 @@ export class ReactionServiceImpl implements ReactionService {
     await this.repository.unreact(userId, postId)
   }
 
+  async getLikesByUser (userId: string): Promise<ReactionDTO[]> {
+    return await this.repository.getLikes(userId)
+  }
+
 }

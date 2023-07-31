@@ -35,3 +35,12 @@ reactionRouter.delete('/:post_id', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).send(`Deleted reaction to post ${post_id}`)
 })
 
+reactionRouter.get('/likes/:user_id', async (req: Request, res: Response) => {
+  
+  const { user_id } = req.params
+
+  const likes = await service.getLikesByUser(user_id)
+
+  return res.status(HttpStatus.OK).json(likes)
+})
+
