@@ -92,10 +92,24 @@ export class PostRepositoryImpl implements PostRepository {
       skip: options.after ?? options.before ? 1 : undefined,
       take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,
       where: {
-        authorId
+        authorId,
+        comment: false
       }
     })
     return posts.map(post => new PostDTO(post))
+  }
+
+  async getCommentsByAuthorId (authorId: string, options: CursorPagination): Promise<PostDTO[]> {
+    const comments = await this.db.post.findMany({
+      cursor: options.after ? { id: options.after } : (options.before) ? { id: options.before } : undefined,
+      skip: options.after ?? options.before ? 1 : undefined,
+      take: options.limit ? (options.before ? -options.limit : options.limit) : undefined,
+      where: {
+        authorId,
+        comment: true
+      }
+    })
+    return comments.map(comment => new PostDTO(comment))
   }
 
   

@@ -42,6 +42,16 @@ postRouter.get('/by_user/:userId', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(posts)
 })
 
+postRouter.get('/by_user/comments/:userId', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+  const { userId: authorId } = req.params
+  const { limit, before, after } = req.query as Record<string, string>
+
+  const comments = await service.getCommentsByAuthor(userId, authorId, { limit: Number(limit), before, after })
+
+  return res.status(HttpStatus.OK).json(comments)
+})
+
 postRouter.post('/', BodyValidation(CreatePostInputDTO), async (req: Request, res: Response) => {
   const { userId } = res.locals.context
   const data = req.body
