@@ -44,3 +44,12 @@ reactionRouter.get('/likes/:user_id', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json(likes)
 })
 
+reactionRouter.get('/retweets/:user_id', async (req: Request, res: Response) => {
+  
+  const { user_id } = req.params
+
+  const retweets = await service.getRetweetsByUser(user_id)
+
+  return res.status(HttpStatus.OK).json(retweets)
+})
+

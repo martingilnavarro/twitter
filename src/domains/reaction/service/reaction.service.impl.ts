@@ -18,4 +18,8 @@ export class ReactionServiceImpl implements ReactionService {
     return await this.repository.getLikes(userId)
   }
 
+  async getRetweetsByUser (userId: string): Promise<ReactionDTO[]> {
+    return await this.repository.getRetweets(userId)
+  }
+
 }

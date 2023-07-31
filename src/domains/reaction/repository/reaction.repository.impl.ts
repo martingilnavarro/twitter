@@ -37,6 +37,16 @@ export class ReactionRepositoryImpl implements ReactionRepository {
     })
     return likes.map(like => new ReactionDTO(like))
   }
+
+  async getRetweets (userId: string): Promise<ReactionDTO[]> {
+    const retweets = await this.db.reaction.findMany({     
+      where: {
+        userId,
+        retweet: true
+      }
+    })
+    return retweets.map(retweet => new ReactionDTO(retweet))
+  }
   
 
 
