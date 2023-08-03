@@ -1,3 +1,4 @@
+
 import { Request, Response, Router } from 'express'
 import HttpStatus from 'http-status'
 import 'express-async-errors'
@@ -11,6 +12,7 @@ export const userRouter = Router()
 
 // Use dependency injection
 const service: UserService = new UserServiceImpl(new UserRepositoryImpl(db))
+
 
 userRouter.get('/', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
