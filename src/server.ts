@@ -57,62 +57,537 @@ const options = {
  * @swagger
  * components:
  *   schemas:
- *     Book:
+ *     User:
  *       type: object
  *       required:
- *         - title
- *         - author
- *         - finished
+ *         - username
+ *         - email
+ *         - password
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the book
- *         title:
+ *           description: The auto-generated id of the user
+ *         username:
  *           type: string
- *           description: The title of your book
- *         author:
+ *         email:
  *           type: string
- *           description: The book author
- *         finished:
+ *         password:
+ *           type: string
+ *         private:
  *           type: boolean
- *           description: Whether you have finished reading the book
+ *           description: Whether the user's profile is private(true) or public(false)
  *         createdAt:
- *           type: string
- *           format: date
- *           description: The date the book was added
+ *           type: date
+ *           description: The date the user was added
  *       example:
- *         id: d5fE_asz
- *         title: The New Turing Omnibus
- *         author: Alexander K. Dewdney
- *         finished: false
- *         createdAt: 2020-03-10T04:05:06.157Z
+ *         id: 2111ff7b-2f1b-4cee-8429-fa4ad9be9891
+ *         username: usuario1
+ *         email: uno@gmail.com
+ *         password: Clave1111!
+ *         private: true
+ *         createdAt: 2023-07-18T15:05:02.756Z
+ *     Post:
+ *       type: object
+ *       required:
+ *         - content
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the post
+ *         authorId:
+ *           type: string
+ *           description: The id of the author of the post
+ *         content:
+ *           type: string
+ *         images:
+ *           type: string[]
+ *         comment:
+ *           type: boolean
+ *           description: Whether the post is a comment to another post or not
+ *         createdAt:
+ *           type: date
+ *           description: The date the user was added
+ *         postCommentedId:
+ *           type: string
+ *           description: The id of the post commented (if it is a comment)
+ *       example:
+ *         id: 9d0f4e45-4afa-446a-bc86-767e4cff558c
+ *         authorId: 2111ff7b-2f1b-4cee-8429-fa4ad9be9891
+ *         content: post11
+ *         images: []
+ *         comment: false
+ *         createdAt: 2023-07-18T15:05:02.756Z
+ *         postCommentedId: null
+ * 
+ *     Follow:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the follow
+ *         followerId:
+ *           type: string
+ *           description: The id of the user who follows
+ *         followedId:
+ *           type: string
+ *           description: The id of the user who is followed
+ *         createdAt:
+ *           type: date
+ *           description: The date the user was added
+ *       example:
+ *         id: 63ce101b-c091-4325-805a-9b4cafe49164
+ *         followerId: 2111ff7b-2f1b-4cee-8429-fa4ad9be9891
+ *         followedId: 3ec623bd-fe6c-408d-b9a6-a9ded7916ea3
+ *         createdAt: 2023-07-18T15:38:51.972Z
+ *     Reaction:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the reaction
+ *         userId:
+ *           type: string
+ *           description: The id of the user who reacted to the post
+ *         postId:
+ *           type: string
+ *           description: The id of the post which was reacted to
+ *         like:
+ *           type: boolean
+ *           description: If the user reacted with a like
+ *         retweet:
+ *           type: boolean
+ *           description: If the user reacted with a retweet
+ *         createdAt:
+ *           type: date
+ *           description: The date the user was added
+ *       example:
+ *         id: 0380bfb4-1d77-44eb-9e8f-6c2fcfd1cef9
+ *         userId: 2111ff7b-2f1b-4cee-8429-fa4ad9be9891
+ *         postId: 0180151a-ec93-46c8-b52f-7a79e9c91e3b
+ *         like: true
+ *         retweet: false
+ *         createdAt: 2023-07-28T20:28:43.777Z
+ * 
+ * 
+ * 
  */
 
 /**
  * @swagger
  * tags:
- *   name: Books
- *   description: The books managing API
- * /books:
+ *   name: Health
+ *   description: The health managing API
+ * /health:
+ *   get:
+ *     summary: Check server health
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Health checked
+ 
+ * 
+
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: The auth managing API
+ * /auth/signup:
  *   post:
- *     summary: Create a new book
- *     tags: [Books]
+ *     summary: Sign up a new user
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Book'
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
- *         description: The created book.
+ *         description: User signed up.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Book'
+ *               $ref: '#/components/schemas/User'
  *       500:
- *         description: Some server error
+ *         description: Some server error 
+ * /auth/login:
+ *   post:
+ *     summary: login a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: User logged in.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Some server error 
+ * 
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: User
+ *   description: The user managing API
+ * /user:
+ *   get:
+ *     summary: Lists all the users
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: The list of the users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ * 
+ *   delete:
+ *     summary: Delete the logged user
+ *     tags: [User]
+ *         
  *
+ *     responses:
+ *       200:
+ *         description: The user was deleted
+ *       404:
+ *         description: The user was not found
+ * 
+ * /user/me:
+ *   get:
+ *     summary: Get the logged user
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: The logged user response
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *   
+ * /user/{userId}:
+ *   get:
+ *     summary: Get the user by id
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user id
+ *     responses:
+ *       200:
+ *         description: The user response by id
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: The user was not found
+ * 
+ * /user/profile/private:
+ *   put:
+ *     summary: Set the status of the logged user to private
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: The status was set to private
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *   
+ * 
+ * /user/profile/public:
+ *   put:
+ *     summary: Set the status of the logged user to public
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: The status was set to public
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *   
+ 
+ *   
+
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Post
+ *   description: The post managing API
+ * /post:
+ *   get:
+ *     summary: Lists all the posts
+ *     tags: [Post]
+ *     responses:
+ *       200:
+ *         description: The list of the posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Post'
+ *   
+ *   post:
+ *     summary: Create a new post
+ *     tags: [Post]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Post'
+ *     responses:
+ *       200:
+ *         description: The created post.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       500:
+ *         description: Some server error 
+ * 
+ * /post/{postId}:
+ *   get:
+ *     summary: Get the post by id
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The post id
+ *     responses:
+ *       200:
+ *         description: The post response by id
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       404:
+ *         description: The post was not found
+ 
+ *   post:
+ *     summary: Create a new comment
+ *     tags: [Post]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Post'
+ *     responses:
+ *       200:
+ *         description: The created post.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       500:
+ *         description: Some server error 
+ * 
+ *   delete:
+ *     summary: Remove the post by id
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The post id
+ *     responses:
+ *       200:
+ *         description: The post was deleted
+ *       404:
+ *         description: The post was not found
+ 
+ * /post/by_user/{userId}:
+ *   get:
+ *     summary: Get the posts of a user by his id
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The author id
+ *     responses:
+ *       200:
+ *         description: The posts response by user id
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       404:
+ *         description: The user was not found
+ * 
+ * /post/by_user/comments/{userId}:
+ *   get:
+ *     summary: Get the comments of a user by his id
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The author id
+ *     responses:
+ *       200:
+ *         description: The comments response by user id
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       404:
+ *         description: The user was not found
+
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Follow
+ *   description: The follow managing API
+ * /follower/follow/{user_id}:
+ *   post:
+ *     summary: follow a user by id
+ *     tags: [Follow]
+ *     responses:
+ *       200:
+ *         description: The created follow.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Follow'
+ *       500:
+ *         description: Some server error 
+ * 
+ * /follower/unfollow/{user_id}:
+ *   post:
+ *     summary: unfollow a user by id
+ *     tags: [Follow]
+ *     responses:
+ *       200:
+ *         description: The deleted follow.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Follow'
+ *       500:
+ *         description: Some server error 
+ */
+
+
+/**
+ * @swagger
+ * tags:
+ *   name: Reaction
+ *   description: The reaction managing API
+ * /reactions/likes/{user_id}:
+ *   get:
+ *     summary: Lists all the likes of the user
+ *     tags: [Reaction]
+ *     responses:
+ *       200:
+ *         description: The list of the likes of the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Reaction'
+ * /reactions/retweets/{user_id}:
+ *   get:
+ *     summary: Lists all the retweets of the user
+ *     tags: [Reaction]
+ *     responses:
+ *       200:
+ *         description: The list of the reactions of the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Reaction'
+ * /reaction/{post_id}:
+ *   post:
+ *     summary: React to a post
+ *     tags: [Reaction]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Reaction'
+ *     responses:
+ *       200:
+ *         description: The created reaction.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Reaction'
+ *       500:
+ *         description: Some server error 
+ * 
+ *   delete:
+ *     summary: Remove the reaction from the post
+ *     tags: [Reaction]
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The post id
+ *     responses:
+ *       200:
+ *         description: The reaction was deleted
+ *       404:
+ *         description: The post was not found
+ 
+ * /post/by_user/{user_id}:
+ *   get:
+ *     summary: Get the posts of a user by his id
+ *     tags: [Post]
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The author id
+ *     responses:
+ *       200:
+ *         description: The posts response by user id
+ *         contens:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       404:
+ *         description: The user was not found
+
  */
 
 const specs = swaggerJsdoc(options);
