@@ -358,16 +358,16 @@ const options = {
  * @swagger
  * tags:
  *   name: Post
- *   description: The post managing API
+ *   description: Endpoints for getting post information
  * /post:
  *   get:
- *     summary: Lists all the posts
+ *     summary: returns post feed paginated
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The list of the posts
+ *         description: OK
  *         content:
  *           application/json:
  *             schema:
@@ -376,7 +376,7 @@ const options = {
  *                 $ref: '#/components/schemas/Post'
  *   
  *   post:
- *     summary: Create a new post
+ *     summary: creates a post
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
@@ -386,15 +386,17 @@ const options = {
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Post'
+ *           example:
+ *             content: post18
  *     responses:
- *       200:
- *         description: The created post.
+ *       201:
+ *         description: created.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
- *       500:
- *         description: Some server error 
+ *       400:
+ *         description: Bad Request
  * 
  * /post/{postId}:
  *   get:
@@ -404,35 +406,44 @@ const options = {
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: postId
  *         schema:
  *           type: string
  *         required: true
  *         description: The post id
  *     responses:
  *       200:
- *         description: The post response by id
- *         contens:
+ *         description: OK
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
  *       404:
- *         description: The post was not found
+ *         description: Not found. You have to follow the author to see his posts
  
  *   post:
- *     summary: Create a new comment
+ *     summary: create a new comment
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The post id
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Post'
+ *           example:
+ *             content: comment1to21A
  *     responses:
- *       200:
- *         description: The created post.
+ *       201:
+ *         description: created.
  *         content:
  *           application/json:
  *             schema:
@@ -441,26 +452,26 @@ const options = {
  *         description: Some server error 
  * 
  *   delete:
- *     summary: Remove the post by id
+ *     summary: deletes a post by id
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: postId
  *         schema:
  *           type: string
  *         required: true
  *         description: The post id
  *     responses:
  *       200:
- *         description: The post was deleted
+ *         description: OK
  *       404:
  *         description: The post was not found
  
  * /post/by_user/{userId}:
  *   get:
- *     summary: Get the posts of a user by his id
+ *     summary: returns all user posts by id
  *     tags: [Post]
  *     security:
  *       - bearerAuth: []
@@ -473,13 +484,13 @@ const options = {
  *         description: The author id
  *     responses:
  *       200:
- *         description: The posts response by user id
- *         contens:
+ *         description: OK
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
  *       404:
- *         description: The user was not found
+ *         description: Not found. You have to follow the author to see his posts
  * 
  * /post/by_user/comments/{userId}:
  *   get:
@@ -496,8 +507,8 @@ const options = {
  *         description: The author id
  *     responses:
  *       200:
- *         description: The comments response by user id
- *         contens:
+ *         description: OK
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
@@ -519,7 +530,7 @@ const options = {
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The created follow.
+ *         description: OK.
  *         content:
  *           application/json:
  *             schema:
@@ -535,7 +546,7 @@ const options = {
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The deleted follow.
+ *         description: OK
  *         content:
  *           application/json:
  *             schema:
@@ -619,28 +630,6 @@ const options = {
  *       404:
  *         description: The post was not found
  
- * /post/by_user/{user_id}:
- *   get:
- *     summary: Get the posts of a user by his id
- *     tags: [Post]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: user_id
- *         schema:
- *           type: string
- *         required: true
- *         description: The author id
- *     responses:
- *       200:
- *         description: The posts response by user id
- *         contens:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Post'
- *       404:
- *         description: The user was not found
 
  */
 
