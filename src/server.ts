@@ -56,36 +56,44 @@ const options = {
 /**
  * @swagger
  * components:
+ *   
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ * 
  *   schemas:
+ 
  *     User:
  *       type: object
- *       required:
- *         - username
- *         - email
- *         - password
  *       properties:
  *         id:
  *           type: string
  *           description: The auto-generated id of the user
+ *           example: 2111ff7b-2f1b-4cee-8429-fa4ad9be9891
  *         username:
  *           type: string
+ *           example: usuario1
  *         email:
  *           type: string
+ *           example: uno@gmail.com 
  *         password:
  *           type: string
+ *           example: Clave1111!
  *         private:
  *           type: boolean
  *           description: Whether the user's profile is private(true) or public(false)
+ *           example: true
  *         createdAt:
  *           type: date
  *           description: The date the user was added
- *       example:
- *         id: 2111ff7b-2f1b-4cee-8429-fa4ad9be9891
- *         username: usuario1
- *         email: uno@gmail.com
- *         password: Clave1111!
- *         private: true
- *         createdAt: 2023-07-18T15:05:02.756Z
+ *           example: 2023-07-18T15:05:02.756Z
+ *       required:
+ *         - username
+ *         - email
+ *         - password
+
  *     Post:
  *       type: object
  *       required:
@@ -118,7 +126,7 @@ const options = {
  *         comment: false
  *         createdAt: 2023-07-18T15:05:02.756Z
  *         postCommentedId: null
- * 
+ 
  *     Follow:
  *       type: object
  *       properties:
@@ -139,6 +147,7 @@ const options = {
  *         followerId: 2111ff7b-2f1b-4cee-8429-fa4ad9be9891
  *         followedId: 3ec623bd-fe6c-408d-b9a6-a9ded7916ea3
  *         createdAt: 2023-07-18T15:38:51.972Z
+ 
  *     Reaction:
  *       type: object
  *       properties:
@@ -167,9 +176,7 @@ const options = {
  *         like: true
  *         retweet: false
  *         createdAt: 2023-07-28T20:28:43.777Z
- * 
- * 
- * 
+
  */
 
 /**
@@ -260,26 +267,30 @@ const options = {
  * @swagger
  * tags:
  *   name: User
- *   description: The user managing API
+ *   description: Endpoints for getting user information
  * /user:
  *   get:
- *     summary: Lists all the users
+ *     summary: returns recomended users paginated
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The list of the users
+ *         description: OK
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized. Missing token
  * 
  *   delete:
  *     summary: Delete the logged user
  *     tags: [User]
- *         
- *
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The user was deleted
@@ -290,6 +301,8 @@ const options = {
  *   get:
  *     summary: Get the logged user
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The logged user response
@@ -302,6 +315,8 @@ const options = {
  *   get:
  *     summary: Get the user by id
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -323,6 +338,8 @@ const options = {
  *   put:
  *     summary: Set the status of the logged user to private
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The status was set to private
@@ -336,6 +353,8 @@ const options = {
  *   put:
  *     summary: Set the status of the logged user to public
  *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The status was set to public
@@ -358,6 +377,8 @@ const options = {
  *   get:
  *     summary: Lists all the posts
  *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The list of the posts
@@ -371,6 +392,8 @@ const options = {
  *   post:
  *     summary: Create a new post
  *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -391,6 +414,8 @@ const options = {
  *   get:
  *     summary: Get the post by id
  *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -411,6 +436,8 @@ const options = {
  *   post:
  *     summary: Create a new comment
  *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -430,6 +457,8 @@ const options = {
  *   delete:
  *     summary: Remove the post by id
  *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -447,6 +476,8 @@ const options = {
  *   get:
  *     summary: Get the posts of a user by his id
  *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -468,6 +499,8 @@ const options = {
  *   get:
  *     summary: Get the comments of a user by his id
  *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: userId
@@ -496,6 +529,8 @@ const options = {
  *   post:
  *     summary: follow a user by id
  *     tags: [Follow]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The created follow.
@@ -510,6 +545,8 @@ const options = {
  *   post:
  *     summary: unfollow a user by id
  *     tags: [Follow]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The deleted follow.
@@ -531,6 +568,8 @@ const options = {
  *   get:
  *     summary: Lists all the likes of the user
  *     tags: [Reaction]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The list of the likes of the user
@@ -544,6 +583,8 @@ const options = {
  *   get:
  *     summary: Lists all the retweets of the user
  *     tags: [Reaction]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: The list of the reactions of the user
@@ -557,6 +598,8 @@ const options = {
  *   post:
  *     summary: React to a post
  *     tags: [Reaction]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       content:
  *         application/json:
@@ -575,6 +618,8 @@ const options = {
  *   delete:
  *     summary: Remove the reaction from the post
  *     tags: [Reaction]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: post_id
@@ -592,6 +637,8 @@ const options = {
  *   get:
  *     summary: Get the posts of a user by his id
  *     tags: [Post]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: user_id
