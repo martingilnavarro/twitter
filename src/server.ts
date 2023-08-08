@@ -176,24 +176,22 @@ const options = {
  * @swagger
  * tags:
  *   name: Health
- *   description: The health managing API
+ *   description: Endpoints for checking server health
  * /health:
  *   get:
  *     summary: Check server health
  *     tags: [Health]
  *     responses:
  *       200:
- *         description: Health checked
- 
+ *         description: OK
  * 
-
  */
 
 /**
  * @swagger
  * tags:
  *   name: Auth
- *   description: The auth managing API
+ *   description: Endpoints for user authentication
  * /auth/signup:
  *   post:
  *     summary: Sign up a new user
@@ -204,18 +202,31 @@ const options = {
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/User'
+ *           example:
+ *             username: usuario1
+ *             email: uno@gmail.com
+ *             password: Clave1111!
+ *          
  *     responses:
- *       200:
- *         description: User signed up.
+ *       201:
+ *         description: created.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
- *       500:
- *         description: Some server error 
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlOWQ5OGE3Mi0xYjliLTRkZGMtYmU4MC1kNDUyMWNmZWMzZjkiLCJpYXQiOjE2OTE0OTM1OTEsImV4cCI6MTY5MTU3OTk5MX0.Sz9a4U3TXg7DRT-MwIitN243xrZChOJBfRDQ_Cxmwdg
+ *                  
+ *       409:
+ *         description: Conflict. User already exists 
+ *       400:
+ *         description: Bad Request
+ * 
  * /auth/login:
  *   post:
- *     summary: login a user
+ *     summary: Log in a user
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -223,15 +234,25 @@ const options = {
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/User'
+ *           example:
+ *             username: usuario1
+ *             email: uno@gmail.com
+ *             password: Clave1111!
  *     responses:
  *       200:
- *         description: User logged in.
+ *         description: OK.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
- *       500:
- *         description: Some server error 
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlOWQ5OGE3Mi0xYjliLTRkZGMtYmU4MC1kNDUyMWNmZWMzZjkiLCJpYXQiOjE2OTE0OTM1OTEsImV4cCI6MTY5MTU3OTk5MX0.Sz9a4U3TXg7DRT-MwIitN243xrZChOJBfRDQ_Cxmwdg
+ *       401:
+ *         description: Unauthorized. Incorrect password
+ *       404:
+ *         description: Not found. Couldn't find user
  * 
  */
 
