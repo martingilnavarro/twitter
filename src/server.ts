@@ -283,56 +283,53 @@ const options = {
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/User'
- *       401:
- *         description: Unauthorized. Missing token
  * 
  *   delete:
- *     summary: Delete the logged user
+ *     summary: deletes the logged user
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The user was deleted
- *       404:
- *         description: The user was not found
+ *         description: OK
+
  * 
  * /user/me:
  *   get:
- *     summary: Get the logged user
+ *     summary: returns information about the logged user
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The logged user response
- *         contens:
+ *         description: OK
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
  *   
  * /user/{userId}:
  *   get:
- *     summary: Get the user by id
+ *     summary: returns information about an user by id
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: userId
  *         schema:
  *           type: string
  *         required: true
  *         description: The user id
  *     responses:
  *       200:
- *         description: The user response by id
- *         contens:
+ *         description: OK
+ *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       404:
- *         description: The user was not found
+ *         description: Not found. Couldn't find user
  * 
  * /user/profile/private:
  *   put:
@@ -342,12 +339,7 @@ const options = {
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The status was set to private
- *         contens:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *   
+ *         description: OK
  * 
  * /user/profile/public:
  *   put:
@@ -357,13 +349,7 @@ const options = {
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The status was set to public
- *         contens:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *   
- 
+ *         description: OK
  *   
 
  */

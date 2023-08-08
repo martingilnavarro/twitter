@@ -44,7 +44,7 @@ userRouter.delete('/', async (req: Request, res: Response) => {
 
   await service.deleteUser(userId)
 
-  return res.status(HttpStatus.OK)
+  return res.status(HttpStatus.OK).send('user deleted')
 })
 
 userRouter.put('/profile/private', async (req: Request, res: Response) => {
