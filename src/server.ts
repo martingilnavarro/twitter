@@ -230,7 +230,6 @@ const options = {
  *         description: Conflict. User already exists 
  *       400:
  *         description: Bad Request
-
  * 
  * /auth/login:
  *   post:
@@ -257,26 +256,10 @@ const options = {
  *                 token:
  *                   type: string
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlOWQ5OGE3Mi0xYjliLTRkZGMtYmU4MC1kNDUyMWNmZWMzZjkiLCJpYXQiOjE2OTE0OTM1OTEsImV4cCI6MTY5MTU3OTk5MX0.Sz9a4U3TXg7DRT-MwIitN243xrZChOJBfRDQ_Cxmwdg
- *       404:
- *         description: Not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message: 
- *                   type: string
- *                   example: Not found. couldn't find user
  *       401:
- *         description: Unauthorized. Incorrect Password
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message: 
- *                   type: string
- *                   example: Unauthorized. You must login to access this content. 
+ *         description: Unauthorized. Incorrect password
+ *       404:
+ *         description: Not found. Couldn't find user
  * 
  */
 
@@ -309,11 +292,6 @@ const options = {
  *     responses:
  *       200:
  *         description: OK
- *         content: 
- *           text/plain:
- *             schema:
- *               type: string
- *               example: user deleted
 
  * 
  * /user/me:
@@ -362,11 +340,6 @@ const options = {
  *     responses:
  *       200:
  *         description: OK
- *         content: 
- *           text/plain:
- *             schema:
- *               type: string
- *               example: Profile private
  * 
  * /user/profile/public:
  *   put:
@@ -377,11 +350,6 @@ const options = {
  *     responses:
  *       200:
  *         description: OK
- *         content: 
- *           text/plain:
- *             schema:
- *               type: string
- *               example: Profile public
  *   
 
  */
@@ -480,7 +448,8 @@ const options = {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Post'
-
+ *       500:
+ *         description: Some server error 
  * 
  *   delete:
  *     summary: deletes a post by id
@@ -497,11 +466,6 @@ const options = {
  *     responses:
  *       200:
  *         description: OK
- *         content: 
- *           text/plain:
- *             schema:
- *               type: string
- *               example: Deleted post
  *       404:
  *         description: The post was not found
  
@@ -524,9 +488,7 @@ const options = {
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Post'
+ *               $ref: '#/components/schemas/Post'
  *       404:
  *         description: Not found. You have to follow the author to see his posts
  * 
@@ -549,9 +511,7 @@ const options = {
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items: 
- *                 $ref: '#/components/schemas/Post'
+ *               $ref: '#/components/schemas/Post'
  *       404:
  *         description: The user was not found
 
@@ -568,13 +528,6 @@ const options = {
  *     tags: [Follow]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: user_id
- *         schema:
- *           type: string
- *         required: true
- *         description: The id of the user to follow
  *     responses:
  *       200:
  *         description: OK.
@@ -582,7 +535,8 @@ const options = {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Follow'
-
+ *       500:
+ *         description: Some server error 
  * 
  * /follower/unfollow/{user_id}:
  *   post:
@@ -590,23 +544,15 @@ const options = {
  *     tags: [Follow]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: user_id
- *         schema:
- *           type: string
- *         required: true
- *         description: The id of the user to unfollow
  *     responses:
  *       200:
  *         description: OK
- *         content: 
- *           text/plain:
+ *         content:
+ *           application/json:
  *             schema:
- *               type: string
- *               example: Unfollow 
-
-
+ *               $ref: '#/components/schemas/Follow'
+ *       500:
+ *         description: Some server error 
  */
 
 
@@ -621,75 +567,51 @@ const options = {
  *     tags: [Reaction]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: user_id
- *         schema:
- *           type: string
- *         required: true
- *         description: The id of the user
  *     responses:
  *       200:
- *         description: OK
+ *         description: The list of the likes of the user
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Reaction'
- * 
  * /reactions/retweets/{user_id}:
  *   get:
  *     summary: Lists all the retweets of the user
  *     tags: [Reaction]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: user_id
- *         schema:
- *           type: string
- *         required: true
- *         description: The id of the user
  *     responses:
  *       200:
- *         description: OK
+ *         description: The list of the reactions of the user
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Reaction'
- * 
  * /reaction/{post_id}:
  *   post:
  *     summary: React to a post
  *     tags: [Reaction]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: post_id
- *         schema:
- *           type: string
- *         required: true
- *         description: The id of the post to react
  *     requestBody:
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Reaction'
- *           example:
- *             like: true
- *             retweet: false
  *     responses:
  *       200:
- *         description: OK
+ *         description: The created reaction.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Reaction'
-
+ *       500:
+ *         description: Some server error 
+ * 
  *   delete:
  *     summary: Remove the reaction from the post
  *     tags: [Reaction]
@@ -704,12 +626,7 @@ const options = {
  *         description: The post id
  *     responses:
  *       200:
- *         description: OK
- *         content: 
- *           text/plain:
- *             schema:
- *               type: string
- *               example: Reaction deleted 
+ *         description: The reaction was deleted
  *       404:
  *         description: The post was not found
  
