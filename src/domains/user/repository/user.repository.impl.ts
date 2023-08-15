@@ -84,4 +84,17 @@ export class UserRepositoryImpl implements UserRepository {
     })
     
   }
+
+  async setImage (userId: string, image: string): Promise<void> {
+    await this.db.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        image: image
+      }
+
+    })
+    
+  }
 }

@@ -30,5 +30,9 @@ export class UserServiceImpl implements UserService {
   async setUserPublic (userId: any): Promise<void> {
     await this.repository.setPublic(userId)
   }
+
+  async setImage (userId: any, image: string): Promise<void> {
+    await this.repository.setImage(userId, image)
+  }
 }
 

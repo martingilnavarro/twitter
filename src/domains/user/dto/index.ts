@@ -4,6 +4,7 @@ export class UserDTO {
     this.name = user.name
     this.createdAt = user.createdAt
     this.private = user.private
+    this.image = user.image
     
     
   }
@@ -12,6 +13,7 @@ export class UserDTO {
   name: string | null
   createdAt: Date
   private: boolean
+  image: string | null
   
 }
 

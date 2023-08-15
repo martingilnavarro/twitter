@@ -62,3 +62,13 @@ userRouter.put('/profile/public', async (req: Request, res: Response) => {
 
   return res.status(HttpStatus.OK).send(`Profile: public`)
 })
+
+userRouter.put('/image', async (req: Request, res: Response) => {
+  const { userId } = res.locals.context
+
+  const { image } = req.body
+
+  await service.setImage(userId, image)
+
+  return res.status(HttpStatus.OK).send(`User image loaded`)
+})

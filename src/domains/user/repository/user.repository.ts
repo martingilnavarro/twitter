@@ -10,4 +10,5 @@ export interface UserRepository {
   getByEmailOrUsername: (email?: string, username?: string) => Promise<ExtendedUserDTO | null>
   setPrivate: (userId:string) => Promise<void>
   setPublic: (userId:string) => Promise<void>
+  setImage: (userId:string, image: string) => Promise<void>
 }
