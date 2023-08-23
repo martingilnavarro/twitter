@@ -8,6 +8,21 @@ import { db } from '@utils'
 import { UserRepositoryImpl } from '../repository'
 import { UserService, UserServiceImpl } from '../service'
 
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { config } from 'process'
+
+
+
+const client = new S3Client({
+  region:'eu-west-1',
+  credentials:{
+      accessKeyId:'test',
+      secretAccessKey:'test',
+      
+  },
+  
+})
+
 export const userRouter = Router()
 
 // Use dependency injection
@@ -63,12 +78,21 @@ userRouter.put('/profile/public', async (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).send(`Profile: public`)
 })
 
+
 userRouter.put('/image', async (req: Request, res: Response) => {
   const { userId } = res.locals.context
 
   const { image } = req.body
 
+  const input = {
+    "Body": "userImage.jpg",
+    "Bucket": "myBucket",
+    "Key": "userImage.jpg"
+  };
+  const command = new PutObjectCommand(input);
+  const response = await client.send(command);
+
   await service.setImage(userId, image)
 
-  return res.status(HttpStatus.OK).send(`User image loaded`)
+  return res.status(HttpStatus.OK).send(response)
 })

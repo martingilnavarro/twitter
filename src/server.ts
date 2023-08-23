@@ -1,10 +1,27 @@
 import express from 'express'
-import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+const app = express()
 
-import { createServer } from "http";
-import { Server } from "socket.io";
+interface ServerToClientEvents {
+  noArg: () => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+}
+
+interface ClientToServerEvents {
+  hello: () => void;
+}
+
+interface InterServerEvents {
+  ping: () => void;
+}
+
+interface SocketData {
+  name: string;
+  age: number;
+}
+
 
 const swaggerJsdoc = require("swagger-jsdoc")
 const swaggerUi = require("swagger-ui-express");
@@ -13,19 +30,27 @@ import { Constants, NodeEnv, Logger } from '@utils'
 import { router } from '@router'
 import { ErrorHandling } from '@utils/errors'
 
-const app = express()
 
-const httpServer = createServer(app);
-const io = new Server(httpServer, { /* options */ });
 
-io.on("connection", (socket) => {
-  // ...
+const http = require('http');
+const server = http.createServer(app);
+import { Server } from "socket.io";
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>();
+
+
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/socket.html');
 });
-// Set up request logger
-if (Constants.NODE_ENV === NodeEnv.DEV) {
-  app.use(morgan('tiny')) // Log requests only in development environments
-}
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
 // Set up request parsers
 app.use(express.json()) // Parses application/json payloads request bodies
 app.use(express.urlencoded({ extended: false })) // Parse application/x-www-form-urlencoded request bodies
